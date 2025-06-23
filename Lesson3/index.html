@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 3</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header><h1 class="text-grey">Contact Form</h1></header>
+    <main>
+      <p class="text-grey">Please fill the form.</p>
+      <!-- Span is not semantic element!  -->
+      <a href="https://google.com" target="_blank"
+        >Search on <span class="text-bold">Google</span></a
+      >
+      <a href="./about.html">About us</a>
+
+      <form method="GET">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="myUserName2423"
+            minlength="3"
+            maxlength="60"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="name@domain.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            placeholder="35"
+            min="0"
+            max="120"
+            step="1"
+          />
+        </div>
+
+        <div>
+          <input type="checkbox" id="consent" name="consent" value="I agree" />
+          <label for="consent"
+            ><a href="./policy.html">Read our policy</a> and accept it</label
+          >
+        </div>
+
+        <fieldset>
+          <legend>Language Preference</legend>
+          <div>
+            <input
+              type="radio"
+              id="lang-english"
+              name="language"
+              value="English"
+            />
+            <label for="lang-english">English</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="lang-turkish"
+              name="language"
+              value="Turkish"
+            />
+            <label for="lang-turkish">Turkish</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="lang-french"
+              name="language"
+              value="French"
+            />
+            <label for="lang-french">French</label>
+          </div>
+        </fieldset>
+
+        <div class="separator"></div>
+        <!-- <input type="submit" value="Send" /> -->
+        <button type="submit">Send</button>
+        <button type="reset">Cancel</button>
+      </form>
+    </main>
+  </body>
+</html>

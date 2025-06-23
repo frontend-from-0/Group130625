@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+
+.text-bold {
+  font-weight: 900;
+}
+
+.text-grey {
+  color: grey;
+}
+
+.separator {
+  height: 2px;
+  background-color: grey;
+  width: 30%;
+  margin: 20px 0;
+}
+
+form {
+  max-width: 30%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  margin: 20px 0;
+}
