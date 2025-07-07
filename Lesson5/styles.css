@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #a9a9a9;
+  margin: 0;
+  font-size: 1.25em;
+
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  color: #e6e6fa;
+  font-family: "Pacifico", cursive;
+}
+
+div {
+  border: 1px solid #808080;
+  display: inline-block;
+  width: 49%;
+  line-height: 32px;
+  font-weight: 400;
+}

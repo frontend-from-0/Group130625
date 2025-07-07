@@ -61,14 +61,13 @@ Example:
    If two rules have the same specificity, the one that appears later in the CSS file will be used.
 
 
-
 # CSS Units
 
 ## Absolute Units
 
 These units are fixed and do not change based on screen size or user settings.
 
-* `px` – Pixels
+* `px` – Pixels (only used for Web)
 * `cm` – Centimeters
 * `mm` – Millimeters
 * `in` – Inches
@@ -86,6 +85,7 @@ These units scale based on other values, such as font size or viewport dimension
 * `em` – Relative to the font-size of the parent
 * `rem` – Relative to the font-size of the root element (`html`)
 * `%` – Relative to the size of the parent element
+We don't really use units below:
 * `ex` – Relative to the x-height of the font (typically the height of "x")
 * `ch` – Relative to the width of the "0" character in the current font
 
