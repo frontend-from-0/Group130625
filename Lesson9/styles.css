@@ -4,7 +4,7 @@
 
 body {
   background-color: #f1f2f3;
-  font-family: "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
+  font-family: 'Segoe UI Adjusted', 'Segoe UI', 'Liberation Sans', sans-serif;
   margin: 0;
 }
 
@@ -27,4 +27,53 @@ body {
 }
 .footer {
   background-color: #006c67;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: [site-start] 200px [content-start] auto 150px [site-end];
+  grid-template-rows: [header-start] 150px [header-end content-start] auto [content-end] 400px [footer-start] 500px [footer-end];
+
+  grid-template-areas: 
+  "header       header header"
+  "sidebar-left main   sidebar-right"
+  "sidebar-left ads    ads"
+  "sidebar-left footer footer";
+}
+
+
+/* Use minmax(500px, 600px) function if you need more flexibility for the element's size */
+
+header {
+  /* grid-column: 1 / -1; */
+  grid-area: header;
+}
+
+.sidebar-left {
+  /* grid-column: 1 / span 1;
+  grid-row: 2 / -1; */
+  grid-area: sidebar-left;
+}
+.content {
+  /* grid-column: 2 / span 1;
+  grid-row: 2 / span 1; */
+  grid-area: main;
+}
+.sidebar-right {
+  /* grid-column: -2 / span 1;
+  grid-row: 2 / span 1; */
+  grid-area: sidebar-right;
+}
+
+.ads-bottom {
+  /* grid-column: 2 / -1;
+  grid-row: 3 / span 1; */
+  grid-area: ads;
+}
+
+.footer {
+  /* grid-column: content-start / site-end;
+  grid-row: footer-start / footer-end; */
+
+  grid-area: footer;
 }
