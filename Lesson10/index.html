@@ -7,6 +7,49 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <nav>
+      <button class="hidden-lg">
+        <img src="./assets/icons/hamburger.svg" alt="" />
+      </button>
 
+      <div>Logo</div>
+
+      <ul class="hidden-sm hidden-md">
+        <li>Home</li>
+        <li>Discover</li>
+        <li>Special Deals</li>
+        <li>Contact</li>
+      </ul>
+
+      <div class="hidden-sm">
+        <span>Log in</span>
+        <span>Sign up</span>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <picture class="hero__picture">
+          <source media="(max-width:465px)" srcset="./assets/hero_xs.webp" />
+          <source media="(min-width:465.98px)" srcset="./assets/hero_lg.webp" />
+          <img src="./assets/hero_lg.webp" alt="TO BE UPDATED" />
+        </picture>
+
+        <div class="hero__content">
+          <h1>Travel top destination of the world</h1>
+          <p>
+            We always make our customer happy by providing as many choices as
+            possible
+          </p>
+
+          <div class="hero__cta">
+            <a href="#" class="btn">Get Started</a>
+            <a href="#" class="btn"><img src="./assets/icons/play.svg" alt="play icon">Watch Demo</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  
   </body>
 </html>
