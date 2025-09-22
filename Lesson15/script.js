@@ -7,37 +7,76 @@ Focus: Variables, data types, arithmetic, strings, random numbers, template lite
 // Instructions: Complete each exercise below by writing your code where indicated.
 
 // 1. Declare variables firstNumber=5 and secondNumber=3 and log their sum.
-// CODE HERE
+
+const firstNumber = 5;
+const secondNumber = 3;
+
+console.log('Ex. 1.', firstNumber + secondNumber);
+
+console.log('---------------------------------');
 
 // 2. Declare variables userName and userAge. Log a greeting: "Hello! I am (userName) and I am (userAge) years old."
 // CODE HERE
+const userName = 'Elif';
+const userAge = 24;
+console.log('Hello! I am ' + userName + ' and I am ' + userAge + ' years old.');
+console.log(`Hello! I am ${userName} and I am ${userAge} years old.`);
 
 // 3. Declare variables a=10 and b=4. Log the result of a-b, a*b, and a/b.
 // CODE HERE
+const a = 10;
+const b = 4;
+const result = [a - b, a * b, a / b];
+console.log('Ex. 3.', result);
 
 // 4. Use template literals to log: "My name is (userName). I like JS."
-// CODE HERE
+console.log(`My name is ${userName}. I like JS.`);
 
 // 5. Declare a string password = "securePass". Log the length of password.
 // CODE HERE
-
+const password = 'uppercase between type';
+console.log('Ex.5.', 'The length of the password is ', password.length);
 // 6. Convert the string "hello world" to uppercase and log it.
 // CODE HERE
+console.log('Ex.6.', 'hello world'.toUpperCase());
 
 // 7. Concatenate "Hello" and "World" with a space in between and log the result.
 // CODE HERE
+const firstWord = 'Hello';
+const secondWord = 'World';
+console.log('Ex.7.', `${firstWord} ${secondWord}`);
 
 // 8. Check the type of a variable, e.g., let x = 42. Log the type using typeof.
 // CODE HERE
+let x = 42;
+console.log(typeof x);
+
+x = 'Hello World';
+console.log(typeof x);
+
+x = ['Hello World'];
+console.log(typeof x);
 
 // 9. Convert the number 100 to a string and log the result.
 // CODE HERE
+const num = 100;
+const string = num.toString();
+const string21321 = num + '';
+console.log(typeof string, num, string, string21321);
 
 // 10. Convert the string "50" to a number and log its type to confirm the conversion.
 // CODE HERE
 
-// 11. Generate a random integer between 0 and 10 and log it.
+const str = "10";
+const number = parseInt(str, 10);
+console.log(typeof str, str, typeof number, number);
+
+// 11. Generate a random integer between 50 and 60 and log it.
 // CODE HERE
+const min = 50;
+const max = 60;
+const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+console.log('randomNumber', randomNumber);
 
 // 12. Round the number 3.7 down using Math.floor and 3.2 up using Math.ceil, log both.
 // CODE HERE
