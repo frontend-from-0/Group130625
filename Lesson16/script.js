@@ -4,13 +4,32 @@
      to sum all elements in an array of numbers.
    - Log the final sum.
 */
+function sumArray(numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum = sum + numbers[i];
+  }
+  console.log(sum);
+}
 
+sumArray([1, 2, 3, 4]);
 /*
 2. Find Maximum Number in an Array
    - Define a function `findMax(numbers)` that uses a for loop to iterate
      through an array and find the largest value.
    - Log the largest value.
 */
+function findMax(numbers) {
+  let max = numbers[0];
+  for (let i = 1; i < numbers.length; i++) {
+    if (numbers[i] > max) {
+      max = numbers[i];
+    }
+  }
+  console.log('Maximum number is:', max);
+}
+
+findMax([3, 5, 7, 2, 8]);
 
 /*
 3. Count Odd and Even Numbers
@@ -19,12 +38,54 @@
    - Log the counts in the format: "Odd: X, Even: Y"
 */
 
+function countOddEven(numbers) {
+  let odd = 0;
+  let even = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 2 === 0) {
+      ++even;
+    } else {
+      ++odd;
+    }
+  }
+
+  console.log('Odd:', odd, 'Even:', even);
+}
+
+countOddEven([1, 2, 3, 4, 5]);
+
 /*
 4. Sum of Numbers in a Range (While Loop)
    - Define a function `sumRange(start, end)` that uses a while loop
      to sum all integers from `start` to `end` (inclusive).
    - Log the final sum.
 */
+function sumRange(start, end) {
+  let sum = start;
+
+  if (start < end) {
+    let i = start + 1; // i  is for index
+    while (i <= end) {
+      console.log('While loop iteration:', i);
+      sum += i; // sum = sum + i;
+      i++;
+    }
+  } else {
+    let i = start - 1;
+    while (i >= end) {
+      console.log('While loop iteration:', i);
+      sum += i; // sum = sum + i;
+      i--;
+    }
+  }
+
+  console.log(sum);
+}
+
+sumRange(5, 13);
+
+sumRange(13, 5);
+sumRange(13, 13);
 
 /*
 5. Reverse an Array
@@ -32,6 +93,16 @@
      of an array manually using a for loop (without using .reverse()).
    - Log the reversed array.
 */
+function reverseArray(arr) {
+  let reversedArray = [];
+  for (let i = arr.length - 1; i >= 0; i--) {
+    reversedArray.push(arr[i]);
+  }
+
+  console.log('Reversed array is', reversedArray);
+}
+reverseArray([1,2,3,4,5]);
+
 
 /*
 6. Filter Out Negative Numbers
@@ -182,7 +253,6 @@
       - logs the removed person
       - logs the final queue
 */
-
 
 /*
 26. To-Do List Application 
