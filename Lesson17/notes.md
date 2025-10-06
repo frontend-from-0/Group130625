@@ -12,6 +12,14 @@ function (parameter1, parameter2) {
   return parameter1 * parameter2;
 };
 
+<!-- Example of using anonymus function
+const button = document.getElementById('submitButton');
+
+button.addEventListener('click', () => {
+  console.log('User clicked the button!');
+  handleFormSubmit();
+}); -->
+
 ### Named function:
 function multiplyTwoNumbers (parameter1, parameter2) {
   return parameter1 * parameter2;
@@ -34,7 +42,7 @@ Anonymus arrow function
 };
 
 ### Single line arrow function experession
-const greet = (name) =>  'Hello '+ name;
+const greet = (name) => 'Hello '+ name;
 greet('John');
 
 ### Multi line arrow function experession
@@ -73,6 +81,7 @@ if (condition) {
 } else {
  ... some code
 }
+
 
 ### Switch statement
 switch (day) {

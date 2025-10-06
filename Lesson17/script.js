@@ -6,7 +6,16 @@
    - Otherwise, log: "Password is too short."
    - Call the function with different passwords and log the result.
 */
+function checkPassword(password) {
+  if (password.toString().length >= 8) {
+    console.log('Password length is sufficient.');
+  } else {
+    console.log('Password is too short.');
+  }
+}
 
+checkPassword('123456');
+checkPassword('123456789');
 
 /*
 2. Uppercase Name
@@ -14,7 +23,16 @@
    - Log the uppercase result to the console.
    - Example: "John Doe" -> "JOHN DOE"
 */
-
+function uppercaseName(name) {
+  if (typeof name !== 'string') {
+    console.log('Please prvide a string value');
+    return;
+  } else {
+    console.log(name.toUpperCase());
+  }
+}
+uppercaseName();
+uppercaseName('hasan');
 
 /*
 3. Lowercase Email
@@ -30,7 +48,20 @@
    - Log the domain to the console.
    - Example: "user@example.com" -> "example.com"
 */
+function getDomain(email) {
+  if (typeof email !== 'string') {
+    console.log('Please prvide a string value');
+    return;
+  }
+  //   const startIndex = email.indexOf('@') + 1;
 
+  //   const domain = email.substring(startIndex);
+  //   console.log(domain);
+
+  const result = email.split('@');
+  console.log(result[1]);
+}
+getDomain('jjasdasdas@example.com');
 
 /*
 5. Check Substring
@@ -40,6 +71,28 @@
    - Else, log: "<word> not found in sentence."
 */
 
+// && - all values must be true for expression to be true (like multiplication by 0)
+// true && false && true && true => false
+// || -
+// true || false || true => true (is like +)
+function containsWord(sentence, word) {
+  if (typeof sentence !== 'string' || typeof word !== 'string') {
+    console.log('Please provide sentece and word parameters as string.');
+    return;
+  }
+
+  if (sentence.includes(word)) {
+    console.log(word + ' found in sentence.');
+  } else {
+    console.log(word + ' not found in the sentence.');
+  }
+}
+
+containsWord('<word> found in sentence.', ' ');
+containsWord('<word> found in sentence.', 'comma found in sentence.');
+containsWord('<word> found in sentence.', true);
+containsWord(124321321312, 12);
+
 /*
 6. File Extension Check
    - Define a function `checkFileExtension(filename)` that checks if the filename
@@ -47,6 +100,16 @@
    - If it does, log: "This is a PDF file."
    - Otherwise, log: "Not a PDF file."
 */
+function checkFileExtension(filename) {
+  // TODO: add type
+  if (filename.endsWith('.pdf')) {
+    console.log('This is a PDF file.');
+  } else {
+    console.log('Not a PDF file.');
+  }
+}
+
+checkFileExtension('myassignment.pdf');
 
 /*
 7. Compare Numbers (if-else)
@@ -55,7 +118,21 @@
      - Logs "b is bigger" if b > a
      - Logs "Numbers are equal" if they are the same
 */
- 
+function compareNumbers(a, b) {
+  // TODO: check that a and b are numbers
+  if (a > b) {
+    console.log('a is bigger');
+  } else if (b > a) {
+    console.log('b is bigger');
+  } else {
+    console.log('Numbers are equal');
+  }
+}
+
+compareNumbers(9, 5);
+compareNumbers(5, 6);
+compareNumbers(4, 4);
+
 /*
 8. Palindrome Check
    - Define a function `isPalindrome(str)` that checks if `str` is the same
@@ -94,7 +171,6 @@
      7 -> "Sunday"
      - Log the matched day or "Invalid day" if out of range.
 */
-
 
 // value == value
 /// value and type === value and type
