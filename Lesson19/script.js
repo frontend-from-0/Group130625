@@ -50,6 +50,59 @@ Node.js or a browser console.
    - Remove the item from the `#items` array if it exists.
 */
 
+class ShoppingCart {
+  #items;
+
+  constructor() {
+    this.#items = [];
+  }
+
+  viewCart() {
+    console.log('Viewing cart....');
+    for (const item of this.#items) {
+      console.log(item);
+    }
+  }
+
+  addItem(name, price, quantity) {
+    console.log('Adding new item to the cart...');
+    for (const item of this.#items) {
+      if (name === item.name) {
+        console.log('increase the quantity.');
+        item.quantity++;
+        return;
+      }
+    }
+
+    const id = new Date().getMilliseconds();
+    this.#items.push({ id, name, price, quantity });
+  }
+
+  // In real life, we usually use id to find elements or do any manipulations
+  removeItem(name) {
+    for (let i = 0; i < this.#items.length; i++) {
+      const currentElement = this.#items[i];
+      if (name.toLowerCase() === currentElement.name.toLowerCase()) {
+        this.#items.splice(i, 1);
+        return;
+      }
+    }
+  }
+}
+
+const myCart = new ShoppingCart();
+myCart.viewCart();
+
+myCart.addItem('Shoes', { amount: 100, currency: 'TRY' }, 1);
+myCart.addItem('Dress', { amount: 70, currency: 'TRY' }, 1);
+
+myCart.viewCart();
+
+myCart.removeItem('Dress');
+
+myCart.viewCart();
+
+
 /*
 -----------------------------------------------------------
   STEP 4: Calculate the Total Cost
@@ -71,5 +124,3 @@ Node.js or a browser console.
      code is valid.
 3. Use an object to store discount codes and their values.
 */
-
-
