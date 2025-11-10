@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +13,7 @@
         <h1>Book an Appointment</h1>
       </header>
 
-      <form class="booking">
+      <form class="booking" id="booking_form">
         <section class="calendar">
           <label for="date">Select a date</label>
           <input type="date" id="date" />
@@ -31,9 +32,17 @@
           <h2>Your Appointment</h2>
           <p>Date: <span id="selected-date">-</span></p>
           <p>Time: <span id="selected-time">-</span></p>
-          <button id="confirm">Confirm Booking</button>
+          <button id="confirm" disabled>Confirm Booking</button>
         </aside>
       </form>
+
+      <section class="hidden" id="confirmation">
+        <h2 id="confirmation-title">The appointment is confirmed!</h2>
+        <div>
+          <p>Date: <span id="confirmed-date"></span></p>
+          <p>Time: <span id="confirmed-time"></span></p>
+        </div>
+      </section>
     </div>
 
     <script src="script.js"></script>
