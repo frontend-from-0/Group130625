@@ -46,6 +46,8 @@ ul {
 
 .button {
   padding: 10px 20px;
+  display: inline-block;
+
   
   color: white;
   border: none;
@@ -53,6 +55,9 @@ ul {
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 20px;
+  margin-top: 20px;
+  text-decoration: none;
+
 }
 
 .button--success {
