@@ -29,9 +29,7 @@ Fetch API uses Promises under the hood, it's the main way how we will be using t
   });
 */
 
-
 const myPromise = new Promise((resolve, reject) => {
-
   setTimeout(() => {
     const randomValue = Math.random();
 
@@ -49,16 +47,45 @@ myPromise
   })
   .catch((error) => {
     console.error(error);
+  })
+  .finally(() => {
+    console.log('Printing this message no matter the result!');
   });
 
-console.log("Promise created. Waiting for it to resolve or reject...");
-
+console.log('Promise created. Waiting for it to resolve or reject...');
 
 /* Asyc / await syntax for working with Promises */
 
 // Examples of making a function asyncronous
 // Function declaration
+async function getData() {
+  const res = await fetch('some url');
+  const data = await res.json();
+  // ... the rest of the code
+}
+
+// async function () {
+
+//   const res = await fetch('some url');
+//   const data = await res.json();
+//   // ... the rest of the code
+// }
+
 // Function expression
+let fetchData = async function () {
+  const res = await fetch('some url');
+  const data = await res.json();
+};
 // Arrow function
+fetchData = async () => {
+  try {
+    const res = await fetch('some url');
+    const data = await res.json();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    // do something else anyway
+  }
+};
 
 // Try, catch, finally
