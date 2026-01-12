@@ -1,5 +1,6 @@
 # Optional Chaining 
 
+
 Optional chaining (`?.`) is a feature in JavaScript that allows you to *safely* access deeply nested properties of an object without having to explicitly check if each intermediate property exists. If a reference is null or undefined, optional chaining short-circuits and returns undefined, preventing runtime errors.
 
 ## Key Points
