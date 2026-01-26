@@ -2,7 +2,6 @@ export const quotes = [
   {
     quote: "Be yourself; everyone else is already taken.",
     author: "Oscar Wilde",
-    likedBy: 0
   },
   {
     quote: "The secret of getting ahead is getting started.",
