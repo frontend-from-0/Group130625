@@ -1,15 +1,16 @@
 'use client';
 
-import { quotes } from '@/quotes';
-import { useState } from 'react';
 import { getRandomNumber } from '@/utils';
 import { Card } from '@/components/Card';
 import { Title } from '@/components/Title';
 import { Body2 } from '@/components/Body2';
 import { Button } from '@/components/Button';
+import {useQuotes, useDispatchQuotes} from '@/app/QuotesProvider';
 
 export default function Home() {
-  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(2);
+  const {quotes, currentQuoteIndex} = useQuotes();
+  const {setQuotes, setCurrentQuoteIndex} = useDispatchQuotes();
+  
 
   function handleNextQuote() {
     const nextIndex = getRandomNumber(0, quotes.length - 1);
@@ -20,10 +21,28 @@ export default function Home() {
     }
   }
 
+  function handleLike() {
+    const currentQuote = quotes[currentQuoteIndex];
+
+    setQuotes((prevQuotes) =>
+      prevQuotes.map((quoteObject) => {
+        if (quoteObject.quote === currentQuote.quote) {
+          return { ...quoteObject, likedBy: quoteObject.likedBy + 1 };
+        } else {
+          return quoteObject;
+        }
+      }),
+    );
+  }
+
   return (
     // JSX
     <main className='min-h-dvh flex items-center justify-center'>
       <Card>
+        <div className='self-end'>
+          <Button onClick={handleLike} variant='ghost'>❤️ {quotes[currentQuoteIndex].likedBy}</Button>
+        </div>
+        
         <Title>{quotes[currentQuoteIndex].quote}</Title>
         <Body2 align='right' style='italic' element='span'>
           by {quotes[currentQuoteIndex].author}

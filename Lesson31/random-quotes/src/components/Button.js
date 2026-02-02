@@ -6,6 +6,8 @@ export function Button({onClick, variant='primary',children}){
         return 'bg-indigo-500 color-indigo-100 hover:bg-indigo-500/50';
       case 'secondary':
         return 'bg-slate-500 color-slate-100 hover:bg-slate-500/50';
+      case 'ghost':
+        return 'color-slate-100 hover:bg-slate-500/10';
       default:
         return '';
     }
