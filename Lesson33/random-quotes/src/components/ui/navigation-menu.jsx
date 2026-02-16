@@ -6,7 +6,7 @@ import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 function NavigationMenu({
-  className,
+  className = '',
   children,
   viewport = true,
   ...props
@@ -27,7 +27,7 @@ function NavigationMenu({
 }
 
 function NavigationMenuList({
-  className,
+  className = '',
   ...props
 }) {
   return (
@@ -39,7 +39,7 @@ function NavigationMenuList({
 }
 
 function NavigationMenuItem({
-  className,
+  className = '',
   ...props
 }) {
   return (

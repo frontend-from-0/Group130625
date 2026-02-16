@@ -30,9 +30,11 @@ logMessage('Test message');
 // 	callback(response);
 // };
 
+type CallbackType = (message: string) => void;
+
 type ProcessUserInput = (
   input: string,
-  callback: (message: string) => void,
+  callback: CallbackType
 ) => void;
 
 const processUserInput: ProcessUserInput = function (input, callback) {

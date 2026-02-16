@@ -36,6 +36,13 @@ type Person = {
 const person1: Person = { id: "123", name: "John" }; 
 const person2: Person = { id: 123, name: "Jane", age: 30 };
 
+type SuperAdminPerson = {
+  superAdmin: boolean;
+};
+
+type CombinedPersonType = SuperAdminPerson & Person;
+
+
 /*
 Main differences between interfaces and types:
 
@@ -78,7 +85,6 @@ type Status = "pending" | "approved" | "rejected";
 // Types can be used to create aliases for primitive types, while interfaces cannot.
 
 type Age = number;
-
 
 
 // Use Cases
