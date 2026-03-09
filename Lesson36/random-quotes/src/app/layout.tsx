@@ -73,6 +73,14 @@ export default async function RootLayout({ children }) {
                 <Link href='/user/profile/'>Profile</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
+             <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <Link href='/example/controlled/'>Controlled example</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild

@@ -4,7 +4,7 @@ import { NewQuoteFormState } from '@/app/user/quotes/new/page';
 import { Quote } from '@/types/quotes';
 import z from 'zod';
 
-const NewQuoteSchema = z.object({
+export const NewQuoteSchema = z.object({
   author: z.string().trim().min(2, { message: 'Author name must be at least 2 characters.' }).max(50),
   quote: z.string().trim().min(2).max(300),
 });
