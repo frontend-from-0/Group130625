@@ -1,45 +1,41 @@
 'use server';
 
 import { NewQuoteFormState } from '@/app/user/quotes/new/page';
+import { NewQuoteSchema } from '@/schemas/quotes';
 import { Quote } from '@/types/quotes';
-import z from 'zod';
-
-export const NewQuoteSchema = z.object({
-  author: z.string().trim().min(2, { message: 'Author name must be at least 2 characters.' }).max(50),
-  quote: z.string().trim().min(2).max(300),
-});
+import { createQuote } from '../services/quotes';
 
 export async function addQuote(
   currentState: NewQuoteFormState,
   formData: FormData,
 ): Promise<NewQuoteFormState> {
-  console.log('Form data');
-  console.log(formData.get('author'));
-  console.log(formData.get('quote'));
-
   const rawData = {
     author: formData.get('author') ?? '',
     quote: formData.get('quote') ?? '',
   };
 
   const result = NewQuoteSchema.safeParse(rawData);
-  console.log('result', result);
 
   if (!result.success) {
     return {
       success: false,
       errors: result.error.flatten().fieldErrors,
-      data: {...rawData as Partial<Quote>}
-    }
+      data: { ...(rawData as Partial<Quote>) },
+    };
   }
-
-  // data validation
-  // store in DB (next lesson)
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-      });
-    }, 2000);
-  });
+  
+  try {
+    await createQuote(result.data);
+    return {
+      success: true,
+      data: result.data,
+    };
+  } catch (err) {
+    console.error('An error occured when saving a new quote to database');
+    return {
+      success: false,
+      message: 'An error occured when saving the quote, try again later.',
+      data: result.data,
+    };
+  }
 }

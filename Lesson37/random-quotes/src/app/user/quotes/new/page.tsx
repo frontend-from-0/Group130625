@@ -11,18 +11,18 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useActionState } from 'react';
 import { addQuote } from '@/app/actions/quoteActions';
-import { NewQuoteInput, Quote } from '@/types/quotes';
+import { NewQuoteInput } from '@/types/quotes';
 import { Spinner } from '@/components/ui/spinner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
-import {NewQuoteSchema} from '@/app/actions/quoteActions';
-
+import { NewQuoteSchema } from '@/schemas/quotes';
 
 export type NewQuoteFormState = {
   success: boolean;
   // Specify the type of errors based on your application's error handling
   errors?: any;
   data?: Partial<NewQuoteInput>;
+  message?: string;
 };
 
 const initialFormState: NewQuoteFormState = {
@@ -60,10 +60,6 @@ export default function NewQuotePage() {
       </div>
     );
   }
-
-  console.log('state', state);
-
-  console.log('Form errors', clientFormErrors);
 
   return (
     <div className='max-w-2xl mx-auto py-10 px-4'>
