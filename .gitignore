@@ -1,3 +1,5 @@
 .DS_Store
 HW/
 settings.json
+/generated/prisma
+node_modules
