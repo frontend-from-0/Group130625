@@ -37,7 +37,6 @@ const receiveUpdates = async (request: Request, response: Response, next: NextFu
       // Call retrieve checkout session's line itemsfrom stripe (by checkout session eventData.id) https://docs.stripe.com/api/checkout/sessions/line_items => information about what was purchased
       // You can send an email to the customer by using information from eventData.customer_details (email, name etc.)
 
-
       // Then define and call a method to handle the successful payment intent.
       // handlePaymentIntentSucceeded(paymentIntent);
       break;
