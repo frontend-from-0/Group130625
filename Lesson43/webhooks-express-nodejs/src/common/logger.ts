@@ -1,4 +1,5 @@
 import pino from 'pino'
+import './env';
 
 const logger = pino({
   name: process.env.APP_ID || 'app',

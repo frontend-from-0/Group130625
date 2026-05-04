@@ -8,3 +8,4 @@ generated/
 
 build
 build/Release
+/generated/prisma
