@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+dist/
+.env
+*.DS_Store
+bin/
+generated/
+
+build
+build/Release
