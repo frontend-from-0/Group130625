@@ -1,0 +1,43 @@
+# Continuous Integration: runs on every push / PR to catch issues before merge.
+# If this folder is the Git repository root on GitHub, workflows here run as usual.
+# If the repo root is a parent folder (monorepo), copy this file to <repo>/.github/workflows/
+# and set defaults.run.working-directory to Lesson44/nextjs-wrapup-demo.
+
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prettier (format check)
+        run: npm run format:check
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      - name: Next.js production build
+        run: npm run build
