@@ -21,7 +21,7 @@
 - Integration &  End-to-End -> Cypress, Playwrigth
 
 ## Important notes:
-- Name folders with test files: __tests__ 
+- Name folders with test files: __tests__ (__spec__)
 - Name test files NameOfTheComponent.test.js or NameOfTheComponent.spec.js
 
 
