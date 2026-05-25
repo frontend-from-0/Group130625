@@ -1,0 +1,41 @@
+name: Playwright
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: Lesson46/ecom-130625/package-lock.json
+      - name: Install dependencies
+        working-directory: Lesson46/ecom-130625
+        run: npm ci
+      - name: Install Playwright Browsers
+        working-directory: Lesson46/ecom-130625
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        working-directory: Lesson46/ecom-130625
+        env:
+          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+          AUTH0_SECRET: ${{ secrets.AUTH0_SECRET }}
+          APP_BASE_URL: http://localhost:4005
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: Lesson46/ecom-130625/playwright-report/
+          retention-days: 30
