@@ -171,6 +171,141 @@ Docs: [Assertions](https://playwright.dev/docs/test-assertions).
 
 ---
 
+## Handling authentication in tests
+
+Admin routes (`/admin/*`) call `requireAdmin()` — they need a real Auth0 session with the **`admin` role** in the token claim. Logging in through the Auth0 Universal Login page on every test is slow, flaky, and hits the public internet. Don't do that.
+
+Playwright's recommended pattern is **`storageState`**: log in once, save the browser cookies to disk, and reuse them across tests. See [Authentication](https://playwright.dev/docs/auth).
+
+### 1. Create a dedicated test user in Auth0
+
+Use a **separate Auth0 account** for E2E — never your personal login.
+
+1. In the Auth0 Dashboard, create a user (e.g. `e2e-admin@yourdomain.test`) with a known password.
+2. Assign the **`admin` role** to that user. Role setup is documented in [`docs/auth0-roles.md`](ecom-130625/docs/auth0-roles.md).
+3. Make sure your local `.env.local` has the Auth0 block configured (`AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `APP_BASE_URL=http://localhost:4005`). See [`env.example.md`](ecom-130625/env.example.md).
+
+For CI you can store the credentials as secrets (e.g. `E2E_ADMIN_EMAIL`, `E2E_ADMIN_PASSWORD`) if you later automate login in a `globalSetup` script. For local development, saving a session file once is simpler.
+
+### 2. Save an admin session once
+
+Start the dev server, then run codegen and log in as your test admin user when the Auth0 page opens. Playwright saves the session cookies when you close codegen:
+
+```bash
+npm run dev
+# in another terminal:
+npx playwright codegen http://localhost:4005/admin/products --save-storage=e2e/.auth/admin.json
+```
+
+After login you should land on `/admin/products`. Close codegen — `e2e/.auth/admin.json` is created.
+
+That file is **gitignored** (`/e2e/.auth/` in `.gitignore`). Each developer creates it locally; never commit session cookies.
+
+### 3. Wire up `playwright.config.ts`
+
+Add a **setup project** that validates the saved session before admin tests run, and point the browser project at the saved cookies:
+
+```ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  use: {
+    baseURL: 'http://localhost:4005',
+    trace: 'on-first-retry',
+  },
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:4005',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+  },
+  projects: [
+    // Runs first — fails fast if the session is missing, expired, or not admin.
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+
+    // Admin / authenticated tests reuse the saved session.
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'e2e/.auth/admin.json',
+      },
+      dependencies: ['setup'],
+      testIgnore: /auth\.setup\.ts/,
+    },
+
+    // Optional: public / logged-out tests without cookies.
+    {
+      name: 'chromium-logged-out',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /logged-out\.spec\.ts/,
+    },
+  ],
+});
+```
+
+The repo includes `e2e/auth.setup.ts` — it checks that `admin.json` exists, opens `/admin/products`, and confirms you are not redirected to `/forbidden` or Auth0 login.
+
+### 4. Write tests against the saved session
+
+Admin tests start already logged in — no login steps in the test body:
+
+```ts
+import { test, expect } from '@playwright/test';
+
+test('admin products page loads', async ({ page }) => {
+  await page.goto('/admin/products');
+  await expect(page.getByRole('heading', { name: 'Products' })).toBeVisible();
+});
+```
+
+To test **logged-out** behaviour in the same file, opt out of the saved session for that test:
+
+```ts
+test.use({ storageState: { cookies: [], origins: [] } });
+
+test('admin route redirects when logged out', async ({ page }) => {
+  await page.goto('/admin');
+  await expect(page).not.toHaveURL('/admin');
+});
+```
+
+Or put logged-out tests in a separate spec matched by the `chromium-logged-out` project above.
+
+### 5. When the session expires
+
+Auth0 sessions expire. If admin tests suddenly redirect to Auth0 or `/forbidden`, refresh the file:
+
+```bash
+npx playwright codegen http://localhost:4005/admin/products --save-storage=e2e/.auth/admin.json
+```
+
+`auth.setup.ts` prints a clear error when this happens so you know to re-run codegen.
+
+### 6. CI
+
+Two common approaches:
+
+| Approach | How | Trade-off |
+| --- | --- | --- |
+| **Saved session secret** | Base64-encode `e2e/.auth/admin.json`, store as a GitHub Actions secret, restore it before `playwright test`. Refresh the secret when the session expires. | Simple; manual refresh |
+| **Programmatic login** | `globalSetup` reads `E2E_ADMIN_EMAIL` / `E2E_ADMIN_PASSWORD` from CI secrets, fills the Auth0 login form once, writes `admin.json`. | More setup; self-healing on each run |
+
+Either way: use the **test user**, stub Stripe/Blob in tests, and keep session files out of git.
+
+### Quick checklist
+
+- [ ] Auth0 test user exists with **`admin` role**
+- [ ] `e2e/.auth/admin.json` saved locally via codegen
+- [ ] `playwright.config.ts` has `setup` + `storageState` projects
+- [ ] Admin tests do **not** call Auth0 login in the test body
+- [ ] Logged-out tests explicitly clear `storageState`
+- [ ] Session file is **not** committed
+
+---
+
 ## Real flows we will test in this app
 
 ### 1. Public homepage (pure E2E smoke test)
@@ -216,7 +351,7 @@ During the lesson you will add Playwright tests for the admin product flow in `e
 
 Hints:
 
-- The form is behind `requireAdmin()`. Use `storageState` with a saved admin session (see section 5 and [Authentication](https://playwright.dev/docs/auth)).
+- The form is behind `requireAdmin()`. Use `storageState` with a saved admin session (see [Handling authentication in tests](#handling-authentication-in-tests) above).
 - Prefer `getByLabel('Product title')`, `getByLabel('Price')`, `getByLabel('Image files')`, and `getByRole('button', { name: /save product/i })`.
 - Use `setInputFiles()` for the image upload. Put a small fixture under `e2e/fixtures/`.
 - Clean up test products from MongoDB in `afterEach` / `finally` so reruns stay reliable.
@@ -245,18 +380,18 @@ test('Buy now posts the right price id to /api/checkout', async ({ page }) => {
 
 Docs: [Network mocking](https://playwright.dev/docs/network), [`page.route`](https://playwright.dev/docs/api/class-page#page-route).
 
-### 5. Auth-gated route (concept only)
+### 5. Auth-gated route (logged out)
 
-Visiting `/admin` while logged out gets you bounced. Real Auth0 login is painful inside E2E — Playwright's recommended pattern is **storageState**: log in once via a setup project, save cookies, and reuse them.
+Visiting `/admin` while logged out gets you bounced. Clear `storageState` for this test (see [Handling authentication in tests](#handling-authentication-in-tests)):
 
 ```ts
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test('admin route is gated', async ({ page }) => {
   await page.goto('/admin');
   await expect(page).not.toHaveURL('/admin');
 });
 ```
-
-For the full storageState pattern read: [Authentication](https://playwright.dev/docs/auth).
 
 ---
 
@@ -265,7 +400,7 @@ For the full storageState pattern read: [Authentication](https://playwright.dev/
 Three things in this repo touch the outside world. Stub them all in tests:
 
 - **Stripe** — intercept `**/api/checkout/**` with `page.route()`.
-- **Auth0** — use `storageState` with a pre-baked session, or stub the session route.
+- **Auth0** — use `storageState` with a test-user session (see [Handling authentication in tests](#handling-authentication-in-tests)); do not drive the login UI on every test.
 - **Vercel Blob** — intercept the upload, return a fake URL.
 
 Rule of thumb: **never let a test reach the public internet**.
