@@ -1,0 +1,1 @@
+// This is a placeholder file just to show possible project structure.
