@@ -13,14 +13,17 @@ export function NewProductForm() {
   );
   const safeState = state ?? initialCreateProductFormState;
   const fieldErrors = safeState.fieldErrors ?? {};
+  const formData = safeState.data ?? initialCreateProductFormState.data;
 
   return (
     <form action={formAction} className="mt-6 grid gap-4 max-w-xl">
       <label className="grid gap-2">
         <span className="text-sm text-slate-200">Product title</span>
         <Input
+          key={`title-${formData.title}-${safeState.status}`}
           type="text"
           name="title"
+          defaultValue={formData.title}
           placeholder="e.g. Orbit Wireless Earbuds"
           aria-invalid={Boolean(fieldErrors.title)}
         />
@@ -32,9 +35,11 @@ export function NewProductForm() {
       <label className="grid gap-2">
         <span className="text-sm text-slate-200">Price</span>
         <Input
+          key={`price-${formData.price}-${safeState.status}`}
           type="number"
           name="price"
           step="0.01"
+          defaultValue={formData.price}
           placeholder="0.00"
           aria-invalid={Boolean(fieldErrors.price)}
         />
@@ -54,6 +59,12 @@ export function NewProductForm() {
         />
         {fieldErrors.images ? (
           <p className="text-sm text-red-300">{fieldErrors.images}</p>
+        ) : null}
+        {formData.imageNames.length > 0 ? (
+          <p className="text-sm text-slate-400">
+            Previously selected: {formData.imageNames.join(", ")}. Re-select files if
+            needed.
+          </p>
         ) : null}
       </label>
 

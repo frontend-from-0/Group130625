@@ -16,8 +16,22 @@ interface ProductPayload {
   }[];
 }
 
+export async function getProducts() {
+  return prisma.product.findMany({
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      title: true,
+      price: true,
+      currency: true,
+      images: true,
+      createdAt: true,
+    },
+  });
+}
+
 export async function createProduct(product: ProductPayload) {
-  return await prisma.product.create({
+  return prisma.product.create({
     data: {
       title: product.title,
       price: product.price,

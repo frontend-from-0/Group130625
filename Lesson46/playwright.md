@@ -101,7 +101,7 @@ npx playwright install
 | `npx playwright show-report` | Open the last HTML report. |
 | `npx playwright show-trace trace.zip` | Open a saved trace. |
 
-Add a script to `package.json` so it feels at home next to `npm test`:
+Add a script to `package.json` after `npm init playwright@latest` so it feels at home next to `npm test`:
 
 ```json
 "scripts": {
@@ -109,6 +109,8 @@ Add a script to `package.json` so it feels at home next to `npm test`:
   "test:e2e:ui": "playwright test --ui"
 }
 ```
+
+These scripts are not in the starter repo — add them during setup.
 
 ---
 
@@ -204,22 +206,20 @@ test('forbidden page links back home', async ({ page }) => {
 });
 ```
 
-### 3. Server-action form validation (integration via the UI)
+### 3. Admin products — lesson exercise (you write these)
 
-We are not unit-testing the Zod schema in isolation — we are checking that **the form + the server action + Zod + the rendered error messages** all wire up correctly.
+During the lesson you will add Playwright tests for the admin product flow in `e2e/admin-products.spec.ts`. Use the patterns from the examples above — do not copy a finished solution from this doc.
 
-> The form lives behind `requireAdmin()`. For the lesson, we either log in as an admin via storageState (see below) or temporarily relax the guard. Most realistic option: storageState.
+**Test A — validation:** open `/admin/products/new`, submit the empty form, and assert the Zod error messages appear in the UI (`Product title is required.`, `Upload at least one image.`).
 
-```ts
-test('new product form shows validation errors for empty submit', async ({ page }) => {
-  await page.goto('/admin/products/new');
+**Test B — create + list:** fill in title, price, and an image file, save, land on `/admin/products`, and assert the new product row is visible (title, price, thumbnail).
 
-  await page.getByRole('button', { name: /save product/i }).click();
+Hints:
 
-  await expect(page.getByText('Product title is required.')).toBeVisible();
-  await expect(page.getByText('Upload at least one image.')).toBeVisible();
-});
-```
+- The form is behind `requireAdmin()`. Use `storageState` with a saved admin session (see section 5 and [Authentication](https://playwright.dev/docs/auth)).
+- Prefer `getByLabel('Product title')`, `getByLabel('Price')`, `getByLabel('Image files')`, and `getByRole('button', { name: /save product/i })`.
+- Use `setInputFiles()` for the image upload. Put a small fixture under `e2e/fixtures/`.
+- Clean up test products from MongoDB in `afterEach` / `finally` so reruns stay reliable.
 
 ### 4. Checkout — network interception (no real Stripe call)
 
@@ -314,10 +314,4 @@ Docs: [UI mode](https://playwright.dev/docs/test-ui-mode), [Trace viewer](https:
 - [Best practices](https://playwright.dev/docs/best-practices)
 - [CI guide](https://playwright.dev/docs/ci)
 
----
 
-## Today's exercise (pick one and ship it)
-
-1. Write `e2e/home.spec.ts` that asserts the homepage shows all 8 products and each card has a price.
-2. Write `e2e/new-product.spec.ts` with three assertions: missing title, missing price, missing image all render the right Zod error.
-3. Write `e2e/checkout.spec.ts` that intercepts `/api/checkout` and asserts the `price_id` value travelling in the form data.

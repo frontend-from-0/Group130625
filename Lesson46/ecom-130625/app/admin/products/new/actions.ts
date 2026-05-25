@@ -1,8 +1,12 @@
 'use server';
 
 import { put as putToBlob } from '@vercel/blob';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import type { CreateProductFormState } from '@/app/admin/products/new/form-state';
+import type {
+  CreateProductFormData,
+  CreateProductFormState,
+} from '@/app/admin/products/new/form-state';
 import { getAdmin } from '@/lib/authz';
 import { createProduct } from '@/services/products/data';
 
@@ -28,6 +32,18 @@ const createProductSchema = z.object({
     ),
 });
 
+function getFormData(formData: FormData): CreateProductFormData {
+  const files = formData
+    .getAll('images')
+    .filter((entry): entry is File => entry instanceof File);
+
+  return {
+    title: String(formData.get('title') ?? ''),
+    price: String(formData.get('price') ?? ''),
+    imageNames: files.filter((file) => file.size > 0).map((file) => file.name),
+  };
+}
+
 function getFileName(file: File, index: number): string {
   const fileExtension = file.name.includes('.')
     ? file.name.split('.').pop()?.toLowerCase()
@@ -42,10 +58,12 @@ export async function createProductAction(
   _prevState: CreateProductFormState,
   formData: FormData,
 ): Promise<CreateProductFormState> {
+  const submittedData = getFormData(formData);
   const maybeUser = await getAdmin();
   if (!maybeUser) return ({
       status: 'error',
       message: 'Only admin user is allowed to create a new product.',
+      data: submittedData,
       fieldErrors: {}
     });
 
@@ -59,10 +77,11 @@ export async function createProductAction(
   });
 
   if (!parsed.success) {
-    const errors = parsed.error.flatten().fieldErrors;
+    const { fieldErrors: errors } = z.flattenError(parsed.error);
     return {
       status: 'error',
       message: 'Please fix the errors below.',
+      data: submittedData,
       fieldErrors: {
         title: errors.title?.[0],
         price: errors.price?.[0],
@@ -75,7 +94,7 @@ export async function createProductAction(
     const uploaded = await Promise.all(
       parsed.data.images.map((file, index) => {
         const filename = getFileName(file, index);
-        putToBlob(filename, file, {
+        return putToBlob(filename, file, {
           access: 'public',
           addRandomSuffix: true,
         });
@@ -83,13 +102,11 @@ export async function createProductAction(
     );
     // TODO: Call stripe here to create a product and price, then add price and product id to the product that we store in Mongo
 
-    await createProduct({title: parsed.data.title, price: parsed.data.price, images: uploaded.map((item) => item.url)});
-
-    return {
-      status: 'success',
-      message: 'Product created successfully.',
-      fieldErrors: {},
-    };
+    await createProduct({
+      title: parsed.data.title,
+      price: parsed.data.price,
+      images: uploaded.map((item) => ({ url: item.url })),
+    });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown error';
@@ -97,7 +114,14 @@ export async function createProductAction(
     return {
       status: 'error',
       message: `Could not create product. ${errorMessage}`,
+      data: {
+        title: parsed.data.title,
+        price: String(parsed.data.price),
+        imageNames: parsed.data.images.map((file) => file.name),
+      },
       fieldErrors: {},
     };
   }
+
+  redirect('/admin/products');
 }
