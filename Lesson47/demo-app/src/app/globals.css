@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  --terminal-bg: #0d1117;
+  --terminal-panel: #161b22;
+  --terminal-border: #30363d;
+  --terminal-fg: #e6edf3;
+  --terminal-muted: #8b949e;
+  --terminal-accent: #3fb950;
+}
+
+@theme inline {
+  --color-terminal-bg: var(--terminal-bg);
+  --color-terminal-panel: var(--terminal-panel);
+  --color-terminal-border: var(--terminal-border);
+  --color-terminal-fg: var(--terminal-fg);
+  --color-terminal-muted: var(--terminal-muted);
+  --color-terminal-accent: var(--terminal-accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--terminal-bg);
+  color: var(--terminal-fg);
+}
