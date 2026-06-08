@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionDirection {
+  INFLOW
+  OUTFLOW
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  account      Account?
+  budgets      Budget[]
+  categories   Category[]
+  transactions Transaction[]
+}
+
+model Account {
+  id       String @id @default(cuid())
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balance  Float
+  currency String @default("USD")
+}
+
+model Category {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  iconKey         String          @default("bag")
+  colorToken      String          @default("brand")
+  isSystemDefault Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  categoryBudgets CategoryBudget[]
+  transactions    Transaction[]
+
+  @@unique([userId, name])
+}
+
+model Budget {
+  id              String           @id @default(cuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  billingMonth    String
+  totalAmount     Float
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  categoryBudgets CategoryBudget[]
+
+  @@unique([userId, billingMonth])
+}
+
+model CategoryBudget {
+  id                    String   @id @default(cuid())
+  budgetId              String
+  budget                Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  categoryId            String
+  category              Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  limitAmount           Float
+  pendingLimitAmount    Float?
+  pendingEffectiveMonth String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@unique([budgetId, categoryId])
+}
+
+model Transaction {
+  id           String               @id @default(cuid())
+  userId       String
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId   String?
+  category     Category?            @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  merchantName String
+  amount       Float
+  direction    TransactionDirection
+  occurredAt   DateTime
+  createdAt    DateTime             @default(now())
+}
