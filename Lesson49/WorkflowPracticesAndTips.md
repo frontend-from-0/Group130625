@@ -104,7 +104,7 @@ If a piece of code needs too many comments to explain, it probably needs to be s
 
 ---
 
-# ⭐ Pro Tips for Beginners
+# Pro Tips for Beginners
 
 - **Ask early, ask often.** It’s **better to ask** a small question early than fix a giant mistake later.
 - **Focus on small tasks.** Deliver working pieces quickly.
@@ -115,5 +115,5 @@ If a piece of code needs too many comments to explain, it probably needs to be s
 
 ---
 
-✅ **Summary:**
+**Summary:**
 > In professional software engineering, you work in an organized way with Git, tasks, reviews, small batches, communication, and responsibility. You aim to write clean, tested, well-organized code that fits into the team’s system — not just \"code that works.\"  

@@ -75,7 +75,7 @@ Agile is a mindset. There are different **frameworks** (ways to organize the wor
 ---
 
 ## Key Agile Roles (especially in Scrum)
-- **Project Owner** = The person resposponsible for delivering the complete project.
+- **Project Owner (Manager)** = The person resposponsible for delivering the complete project.
 - **Product Owner** = The person who knows what the customer wants.
 - **Scrum Master** = The person who helps the team follow Agile rules.
 - **Development Team** = The people who build the product.
