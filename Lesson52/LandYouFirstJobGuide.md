@@ -67,6 +67,7 @@ can parse your resume and match you with relevant postings in real-time. Use the
 - Software Developer
 - Software Engineer
 - Frontend Developer
+- Full stack developer
 - Frontend Intern / Trainee Developer: Larger organizations or tech giants in Turkey (e.g., Trendyol, Hepsiburada) and in Sweden (e.g., Spotify, Klarna) might offer structured programs.
 
 
